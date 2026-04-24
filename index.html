@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scopus Agrosolutions | B2B Agrochemicals</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#16a34a',
+                        secondary: '#2563eb',
+                        accent: '#facc15',
+                        danger: '#dc2626',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;900&display=swap');
+        body { font-family: 'Poppins', sans-serif; scroll-behavior: smooth; }
+        .glass { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); }
+
+        /* Hamburger animation */
+        .hamburger-line {
+            display: block;
+            width: 24px;
+            height: 2px;
+            background: currentColor;
+            transition: all 0.3s ease;
+            transform-origin: center;
+        }
+        .menu-open .hamburger-line:nth-child(1) {
+            transform: translateY(8px) rotate(45deg);
+        }
+        .menu-open .hamburger-line:nth-child(2) {
+            opacity: 0;
+            transform: scaleX(0);
+        }
+        .menu-open .hamburger-line:nth-child(3) {
+            transform: translateY(-8px) rotate(-45deg);
+        }
+
+        /* Mobile menu slide */
+        #mobile-menu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        #mobile-menu.menu-open {
+            max-height: 400px;
+        }
+
+        /* Cart sidebar overlay */
+        #cart-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 99;
+            backdrop-filter: blur(2px);
+        }
+        #cart-overlay.active { display: block; }
+    </style>
+</head>
+<body class="bg-slate-50 dark:bg-gray-900 text-slate-800 dark:text-gray-100 transition-colors duration-300">
+
+    <!-- Top Bar -->
+    <div class="bg-primary text-white text-[10px] sm:text-xs py-2 px-4 sm:px-6 flex justify-between items-center font-semibold">
+        <div class="flex items-center gap-3 sm:gap-4">
+            <span class="hidden sm:inline">Delivering Countrywide</span>
+            <span>+254715081336</span>
+        </div>
+        <div class="flex items-center gap-2">
+            <span class="bg-white/20 px-2 py-0.5 rounded">B2B Focused</span>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 bg-white/90 dark:bg-gray-800/90 backdrop-blur-md shadow-sm border-b dark:border-gray-700">
+        <div class="px-4 sm:px-6 py-3 sm:py-4 flex justify-between items-center">
+            <!-- Logo -->
+            <div class="flex items-center gap-2 sm:gap-3">
+                <div class="w-9 h-9 sm:w-12 sm:h-12 bg-primary rounded-xl flex items-center justify-center text-white font-black text-lg sm:text-2xl shadow-lg rotate-3 flex-shrink-0">SA</div>
+                <div>
+                    <h1 class="text-base sm:text-xl font-bold leading-none text-primary uppercase tracking-tight">Scopus</h1>
+                    <span class="text-[8px] sm:text-[9px] font-bold text-secondary tracking-[0.2em] uppercase">Agrosolutions</span>
+                </div>
+            </div>
+
+            <!-- Desktop Nav Links -->
+            <div class="hidden lg:flex gap-8 text-sm font-bold uppercase tracking-wider">
+                <a href="index.html" class="hover:text-primary transition">Home</a>
+                <a href="products.html" class="hover:text-primary transition">Products</a>
+                <a href="about.html" class="hover:text-primary transition">About</a>
+                <a href="contact.html" class="hover:text-primary transition">Contact</a>
+            </div>
+
+            <!-- Right Controls -->
+            <div class="flex items-center gap-1 sm:gap-3">
+                <!-- Theme Toggle -->
+                <button id="theme-toggle" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+                    <svg class="w-5 h-5 dark:hidden" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+                    <svg class="w-5 h-5 hidden dark:block" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" clip-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"></path></svg>
+                </button>
+
+                <!-- Cart -->
+                <button onclick="toggleCart()" class="relative p-2 text-gray-700 dark:text-gray-300 hover:text-primary transition">
+                    <svg class="w-6 h-6 sm:w-7 sm:h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+                    <span id="cart-count" class="absolute top-0 right-0 bg-danger text-white text-[10px] font-bold rounded-full h-4 w-4 flex items-center justify-center border-2 border-white dark:border-gray-800">0</span>
+                </button>
+
+                <!-- Hamburger (mobile only) -->
+                <button id="hamburger-btn" class="lg:hidden p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition flex flex-col gap-1.5 items-center justify-center" aria-label="Toggle menu">
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="lg:hidden bg-white dark:bg-gray-800 border-t dark:border-gray-700">
+            <div class="px-4 py-4 flex flex-col gap-1">
+                <a href="index.html" onclick="closeMobileMenu()" class="px-4 py-3 rounded-xl font-bold uppercase tracking-wider text-sm hover:bg-primary/10 hover:text-primary transition">Home</a>
+                <a href="products.html" onclick="closeMobileMenu()" class="px-4 py-3 rounded-xl font-bold uppercase tracking-wider text-sm hover:bg-primary/10 hover:text-primary transition">Products</a>
+                <a href="about.html" onclick="closeMobileMenu()" class="px-4 py-3 rounded-xl font-bold uppercase tracking-wider text-sm hover:bg-primary/10 hover:text-primary transition">About</a>
+                <a href="contact.html" onclick="closeMobileMenu()" class="px-4 py-3 rounded-xl font-bold uppercase tracking-wider text-sm hover:bg-primary/10 hover:text-primary transition">Contact</a>
+                <div class="mt-3 pt-3 border-t dark:border-gray-700">
+                    <a href="tel:+254715081336" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-primary/10 text-primary font-bold text-sm">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"></path></svg>
+                        +254715081336
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <header class="relative min-h-[500px] sm:min-h-[600px] flex items-center overflow-hidden">
+        <img src="https://images.unsplash.com/photo-1625246333195-78d9c38ad449?auto=format&fit=crop&q=80&w=1470" class="absolute inset-0 w-full h-full object-cover" alt="Hero">
+        <div class="absolute inset-0 bg-gradient-to-r from-gray-900 via-gray-900/70 to-transparent"></div>
+        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 w-full py-16 sm:py-0">
+            <div class="max-w-2xl">
+                <span class="bg-accent text-gray-900 px-3 py-1 rounded text-[10px] sm:text-xs font-black uppercase tracking-widest mb-4 sm:mb-6 inline-block">Authorized Distributor</span>
+                <h2 class="text-3xl sm:text-5xl md:text-7xl font-extrabold text-white mb-4 sm:mb-6 leading-tight">Elite <span class="text-primary">Foliar</span> Solutions and Agrochemicals.</h2>
+                <p class="text-base sm:text-xl text-gray-200 mb-6 sm:mb-10 leading-relaxed">Providing high-performance chemical fertilizers and crop protection countrywide. Your harvest, our priority.</p>
+                <div class="flex flex-col sm:flex-row gap-3 sm:gap-4">
+                    <a href="#products" class="bg-primary hover:bg-green-700 text-white px-8 sm:px-10 py-3.5 sm:py-4 rounded-2xl font-bold transition flex items-center justify-center gap-2 shadow-xl shadow-green-900/20">Browse Catalog</a>
+                    <a href="#contact" class="bg-white/10 backdrop-blur-md text-white border border-white/30 px-8 sm:px-10 py-3.5 sm:py-4 rounded-2xl font-bold hover:bg-white/20 transition text-center">Contact Us</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Features Bar -->
+    <section class="py-8 sm:py-12 bg-white dark:bg-gray-800 border-b dark:border-gray-700 relative z-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-8">
+            <div class="flex gap-4 sm:gap-5 items-center p-4 sm:p-6 rounded-2xl hover:bg-gray-50 dark:hover:bg-gray-700/30 transition">
+                <div class="w-12 h-12 sm:w-14 sm:h-14 bg-blue-100 dark:bg-blue-900/40 text-secondary rounded-full flex shrink-0 items-center justify-center font-bold text-xl sm:text-2xl">01</div>
+                <div><h4 class="font-bold text-sm sm:text-base">Global Quality</h4><p class="text-xs opacity-60">Certified international agro-standards.</p></div>
+            </div>
+            <div class="flex gap-4 sm:gap-5 items-center p-4 sm:p-6 rounded-2xl hover:bg-gray-50 dark:hover:bg-gray-700/30 transition">
+                <div class="w-12 h-12 sm:w-14 sm:h-14 bg-green-100 dark:bg-green-900/40 text-primary rounded-full flex shrink-0 items-center justify-center font-bold text-xl sm:text-2xl">02</div>
+                <div><h4 class="font-bold text-sm sm:text-base">Fast Delivery</h4><p class="text-xs opacity-60">Shipments to all 47 counties within 48hrs.</p></div>
+            </div>
+            <div class="flex gap-4 sm:gap-5 items-center p-4 sm:p-6 rounded-2xl hover:bg-gray-50 dark:hover:bg-gray-700/30 transition">
+                <div class="w-12 h-12 sm:w-14 sm:h-14 bg-yellow-100 dark:bg-yellow-900/40 text-yellow-600 rounded-full flex shrink-0 items-center justify-center font-bold text-xl sm:text-2xl">03</div>
+                <div><h4 class="font-bold text-sm sm:text-base">B2B Pricing</h4><p class="text-xs opacity-60">Competitive rates for large-scale supply.</p></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products -->
+    <main id="products" class="max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-24">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 sm:mb-16 gap-4 sm:gap-6">
+            <div>
+                <h3 class="text-3xl sm:text-4xl font-black mb-3 sm:mb-4">Chemical <span class="text-primary">Inventory</span></h3>
+                <p class="text-gray-500 max-w-md text-sm sm:text-base">Our high-performance range specifically selected for soil restoration and pest control.</p>
+            </div>
+            <div class="flex flex-wrap gap-2">
+                <span class="px-3 sm:px-4 py-1.5 sm:py-2 bg-primary/10 text-primary rounded-full text-xs font-bold">All Products</span>
+                <span class="px-3 sm:px-4 py-1.5 sm:py-2 bg-gray-100 dark:bg-gray-800 rounded-full text-xs font-bold">Fertilizers</span>
+                <span class="px-3 sm:px-4 py-1.5 sm:py-2 bg-gray-100 dark:bg-gray-800 rounded-full text-xs font-bold">Pesticides</span>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 sm:gap-8" id="product-list"></div>
+    </main>
+
+    <!-- About -->
+    <section id="about" class="bg-gray-50 dark:bg-gray-800/50 py-16 sm:py-24 px-4 sm:px-6">
+        <div class="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-12 sm:gap-20">
+            <div class="flex-1 relative w-full">
+                <div class="absolute -top-10 -left-10 w-40 h-40 bg-accent/20 rounded-full blur-3xl"></div>
+                <img src="https://images.unsplash.com/photo-1592982537447-7440770cbfc9?auto=format&fit=crop&q=80&w=800" class="rounded-[30px] sm:rounded-[40px] shadow-2xl relative z-10 w-full" alt="Farmer">
+                <div class="absolute -bottom-4 -right-4 sm:-bottom-6 sm:-right-6 bg-white dark:bg-gray-700 p-5 sm:p-8 rounded-3xl shadow-xl z-20 hidden sm:block">
+                    <p class="text-3xl sm:text-4xl font-black text-primary">15k+</p>
+                    <p class="text-xs font-bold text-gray-400 uppercase tracking-widest">Hectares Served</p>
+                </div>
+            </div>
+            <div class="flex-1 space-y-6 sm:space-y-8">
+                <h3 class="text-3xl sm:text-4xl md:text-5xl font-black leading-tight">Driving Agricultural <span class="text-secondary">Excellence</span> Since 2026.</h3>
+                <p class="text-base sm:text-lg opacity-70 leading-relaxed">At Scopus Agrosolutions, we bridge the gap between premium chemical science and practical large-scale farming. We understand that your bottom line depends on yield quality and consistency.</p>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+                    <div class="p-4 border-l-4 border-primary bg-white dark:bg-gray-800 shadow-sm">
+                        <h5 class="font-bold mb-1 text-sm sm:text-base">Pure Formulations</h5>
+                        <p class="text-xs opacity-60">High-concentration ingredients for better efficacy.</p>
+                    </div>
+                    <div class="p-4 border-l-4 border-secondary bg-white dark:bg-gray-800 shadow-sm">
+                        <h5 class="font-bold mb-1 text-sm sm:text-base">Expert Support</h5>
+                        <p class="text-xs opacity-60">Dedicated agronomists for B2B consultation.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact" class="py-16 sm:py-24 px-4 sm:px-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="bg-gray-900 rounded-[30px] sm:rounded-[50px] overflow-hidden flex flex-col lg:flex-row shadow-2xl">
+                <div class="lg:w-1/2 p-8 sm:p-12 md:p-20 text-white flex flex-col justify-center">
+                    <h3 class="text-2xl sm:text-4xl font-bold mb-4 sm:mb-6">Need a Custom Quote?</h3>
+                    <p class="text-gray-400 mb-8 sm:mb-12 text-sm sm:text-base">Submit your details and order requirements. Our sales team will reach out via WhatsApp immediately to finalize your B2B shipment.</p>
+
+                    <div class="space-y-4 sm:space-y-6">
+                        <div class="flex items-center gap-4">
+                            <div class="w-9 h-9 sm:w-10 sm:h-10 bg-primary/20 text-primary rounded-lg flex items-center justify-center text-sm sm:text-base">✔</div>
+                            <p class="font-semibold text-sm sm:text-base">Bulk Discount Availability</p>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div class="w-9 h-9 sm:w-10 sm:h-10 bg-primary/20 text-primary rounded-lg flex items-center justify-center text-sm sm:text-base">✔</div>
+                            <p class="font-semibold text-sm sm:text-base">Soil Testing Consultations</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="lg:w-1/2 bg-white dark:bg-gray-800 p-8 sm:p-12 md:p-20">
+                    <form onsubmit="sendContactWhatsApp(event)" class="space-y-5 sm:space-y-6">
+                        <div>
+                            <label class="text-[10px] font-black uppercase text-gray-400 mb-2 block tracking-widest">Full Name</label>
+                            <input type="text" id="contact-name" required placeholder="John Doe" class="w-full bg-gray-50 dark:bg-gray-900 border-none rounded-2xl p-3.5 sm:p-4 text-sm focus:ring-2 focus:ring-primary">
+                        </div>
+                        <div>
+                            <label class="text-[10px] font-black uppercase text-gray-400 mb-2 block tracking-widest">Subject</label>
+                            <input type="text" id="contact-subject" required placeholder="Bulk Order Inquiry" class="w-full bg-gray-50 dark:bg-gray-900 border-none rounded-2xl p-3.5 sm:p-4 text-sm focus:ring-2 focus:ring-primary">
+                        </div>
+                        <div>
+                            <label class="text-[10px] font-black uppercase text-gray-400 mb-2 block tracking-widest">Your Message</label>
+                            <textarea id="contact-message" required rows="4" placeholder="How can we help your farm?" class="w-full bg-gray-50 dark:bg-gray-900 border-none rounded-2xl p-3.5 sm:p-4 text-sm focus:ring-2 focus:ring-primary"></textarea>
+                        </div>
+                        <button type="submit" class="w-full bg-primary text-white py-4 sm:py-5 rounded-2xl font-black text-xs sm:text-sm uppercase tracking-widest hover:bg-green-700 transition shadow-xl shadow-green-200 dark:shadow-none">Send to WhatsApp</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cart Overlay -->
+    <div id="cart-overlay" onclick="toggleCart()"></div>
+
+    <!-- Cart Sidebar -->
+    <div id="cart-sidebar" class="fixed inset-y-0 right-0 w-full sm:w-[420px] bg-white dark:bg-gray-900 shadow-2xl z-[100] transform translate-x-full transition-transform duration-500 ease-in-out border-l dark:border-gray-700">
+        <div class="p-6 sm:p-10 h-full flex flex-col">
+            <div class="flex justify-between items-center mb-8 sm:mb-12">
+                <div>
+                    <h3 class="text-2xl sm:text-3xl font-black">Your Order</h3>
+                    <p class="text-xs text-gray-400 font-bold uppercase tracking-widest mt-1">Review Items</p>
+                </div>
+                <button onclick="toggleCart()" class="w-10 h-10 sm:w-12 sm:h-12 rounded-full border dark:border-gray-700 flex items-center justify-center hover:bg-danger hover:text-white transition text-xl sm:text-2xl">&times;</button>
+            </div>
+
+            <div id="cart-items" class="flex-grow overflow-y-auto pr-1 sm:pr-2 space-y-4 sm:space-y-6"></div>
+
+            <div class="mt-6 sm:mt-10 pt-6 sm:pt-10 border-t dark:border-gray-800">
+                <div class="flex justify-between text-2xl sm:text-3xl font-black mb-6 sm:mb-8">
+                    <span>Total</span>
+                    <span id="cart-total" class="text-primary">KES 0.00</span>
+                </div>
+
+                <button onclick="sendWhatsAppOrder()" class="w-full bg-[#25D366] text-white py-4 sm:py-5 rounded-2xl font-black uppercase tracking-widest hover:bg-[#128C7E] transition shadow-xl flex items-center justify-center gap-3 mb-4 sm:mb-6 group text-sm">
+                    <svg class="w-5 h-5 sm:w-6 sm:h-6 group-hover:scale-110 transition" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+                    Order via WhatsApp
+                </button>
+                <button onclick="clearCart()" class="w-full text-danger text-[10px] font-black uppercase tracking-widest opacity-60 hover:opacity-100 transition">Discard Entire Order</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white pt-12 sm:pt-20 pb-8 sm:pb-10 px-4 sm:px-6 border-t border-white/5">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-6 sm:gap-10">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 sm:w-12 sm:h-12 bg-primary rounded-xl flex items-center justify-center text-white font-black text-xl sm:text-2xl">SA</div>
+                <div>
+                    <h4 class="text-lg sm:text-xl font-bold leading-none">Scopus</h4>
+                    <span class="text-[9px] font-bold text-gray-500 tracking-[0.2em] uppercase">Agrosolutions</span>
+                </div>
+            </div>
+            <p class="text-xs text-gray-500 font-bold uppercase tracking-[0.2em] sm:tracking-[0.3em] text-center">© 2026 Scopus Agrosolutions. All rights reserved.</p>
+            <div class="flex gap-4 sm:gap-6">
+                <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-white/10 flex items-center justify-center hover:bg-primary transition cursor-pointer text-xs font-bold">FB</div>
+                <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-white/10 flex items-center justify-center hover:bg-primary transition cursor-pointer text-xs font-bold">LN</div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const ownerPhone = "254715081336";
+
+        const products = [
+            { id: 1, name: "Nitro-Boost 40+", price: 1250, img: "https://4endurance.com/cdn/shop/files/Nitro-boost-fruit-punch_9d6aa165-59f4-4351-94d0-35602a818f85_1024x.jpg?v=1765962626" },
+            { id: 2, name: "Prime Root-Force", price: 3400, img: "https://m.media-amazon.com/images/I/61tFMap0rqL._AC_UF1000,1000_QL80_.jpg" },
+            { id: 3, name: "Alpha-Pest Guard", price: 2100, img: "https://images-na.ssl-images-amazon.com/images/I/712T9MmxChL._UL500_.jpg" },
+            { id: 4, name: "Scopus UltraFoliar", price: 5600, img: "https://organicfields.co.ke/assets/img/thumb/4.png" },
+            { id: 5, name: "Soil-Vital Max", price: 4200, img: "https://images.unsplash.com/photo-1592982537447-7440770cbfc9?auto=format&fit=crop&q=80&w=400" }
+        ];
+
+        const variations = ["250ml", "500ml", "1l", "5l", "10l", "20l"];
+        let cart = JSON.parse(localStorage.getItem('scopus_cart_final')) || [];
+
+        // Hamburger Menu
+        const hamburgerBtn = document.getElementById('hamburger-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        hamburgerBtn.addEventListener('click', () => {
+            const isOpen = mobileMenu.classList.toggle('menu-open');
+            hamburgerBtn.classList.toggle('menu-open', isOpen);
+        });
+
+        function closeMobileMenu() {
+            mobileMenu.classList.remove('menu-open');
+            hamburgerBtn.classList.remove('menu-open');
+        }
+
+        // Close mobile menu on outside click
+        document.addEventListener('click', (e) => {
+            if (!hamburgerBtn.contains(e.target) && !mobileMenu.contains(e.target)) {
+                closeMobileMenu();
+            }
+        });
+
+        function init() {
+            renderProducts();
+            updateCartUI();
+            setupTheme();
+        }
+
+        function renderProducts() {
+            const list = document.getElementById('product-list');
+            list.innerHTML = products.map(p => `
+                <div class="bg-white dark:bg-gray-800 rounded-[24px] sm:rounded-[32px] overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 group border dark:border-gray-700">
+                    <div class="h-52 sm:h-64 overflow-hidden relative">
+                        <img src="${p.img}" class="w-full h-full object-cover group-hover:scale-110 transition duration-700" alt="${p.name}">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition"></div>
+                        <span class="absolute top-4 sm:top-6 left-4 sm:left-6 bg-secondary text-white text-[9px] font-black px-3 py-1.5 rounded-full tracking-widest">PREMIUM GRADE</span>
+                    </div>
+                    <div class="p-5 sm:p-8">
+                        <h4 class="font-bold text-xl sm:text-2xl mb-1 group-hover:text-primary transition">${p.name}</h4>
+                        <p class="text-xs text-gray-400 font-bold mb-3 sm:mb-4">Chemical Agrosolution</p>
+
+                        <div class="flex items-center gap-2 mb-4 sm:mb-6">
+                            <span class="text-primary font-black text-xl sm:text-2xl">KES ${p.price.toLocaleString()}</span>
+                            <span class="text-xs text-gray-400 line-through">KES ${(p.price * 1.2).toLocaleString()}</span>
+                        </div>
+
+                        <div class="space-y-3 sm:space-y-4">
+                            <div>
+                                <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-2">Package Size</label>
+                                <select id="size-${p.id}" class="w-full bg-gray-50 dark:bg-gray-900 border-none rounded-xl p-3 text-sm focus:ring-2 focus:ring-primary appearance-none cursor-pointer">
+                                    ${variations.map(v => `<option value="${v}">${v}</option>`).join('')}
+                                </select>
+                            </div>
+                            <button onclick="addToCart(${p.id}, event)" class="w-full bg-primary text-white py-3.5 sm:py-4 rounded-2xl hover:bg-green-700 transition font-black text-xs uppercase tracking-widest shadow-xl shadow-green-100 dark:shadow-none">
+                                Add To Order
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function addToCart(productId, event) {
+            const product = products.find(p => p.id === productId);
+            const size = document.getElementById(`size-${productId}`).value;
+            cart.push({ ...product, selectedSize: size, cartId: Date.now() });
+            saveCart();
+            updateCartUI();
+
+            const btn = event.currentTarget;
+            const originalText = btn.innerText;
+            btn.innerText = "ADDED ✓";
+            btn.classList.add('bg-secondary');
+            setTimeout(() => {
+                btn.innerText = originalText;
+                btn.classList.remove('bg-secondary');
+            }, 1000);
+        }
+
+        function toggleCart() {
+            const sidebar = document.getElementById('cart-sidebar');
+            const overlay = document.getElementById('cart-overlay');
+            const isOpen = !sidebar.classList.contains('translate-x-full');
+
+            sidebar.classList.toggle('translate-x-full', isOpen);
+            overlay.classList.toggle('active', !isOpen);
+            document.body.style.overflow = isOpen ? '' : 'hidden';
+        }
+
+        function removeFromCart(cartId) {
+            cart = cart.filter(item => item.cartId !== cartId);
+            saveCart();
+            updateCartUI();
+        }
+
+        function clearCart() {
+            if (confirm("Empty your entire cart?")) {
+                cart = [];
+                saveCart();
+                updateCartUI();
+            }
+        }
+
+        function saveCart() {
+            localStorage.setItem('scopus_cart_final', JSON.stringify(cart));
+        }
+
+        function updateCartUI() {
+            const container = document.getElementById('cart-items');
+            const count = document.getElementById('cart-count');
+            const total = document.getElementById('cart-total');
+
+            count.innerText = cart.length;
+
+            if (cart.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-16 sm:py-20 opacity-20">
+                        <svg class="w-16 h-16 sm:w-24 sm:h-24 mx-auto mb-4 sm:mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+                        <p class="font-black text-sm uppercase tracking-widest">No Items Selected</p>
+                    </div>
+                `;
+                total.innerText = `KES 0.00`;
+            } else {
+                container.innerHTML = cart.map(item => `
+                    <div class="flex gap-4 sm:gap-6 bg-gray-50 dark:bg-gray-800/50 p-4 sm:p-6 rounded-3xl relative group border border-transparent hover:border-primary transition">
+                        <img src="${item.img}" class="w-18 h-18 sm:w-24 sm:h-24 object-cover rounded-2xl shadow-sm flex-shrink-0" style="width:72px;height:72px" onerror="this.style.display='none'">
+                        <div class="flex-grow min-w-0">
+                            <p class="font-bold text-base sm:text-lg leading-tight mb-1 truncate">${item.name}</p>
+                            <p class="text-[10px] font-black text-primary uppercase tracking-widest mb-1 sm:mb-2">${item.selectedSize}</p>
+                            <p class="text-base sm:text-lg font-black">KES ${item.price.toLocaleString()}</p>
+                        </div>
+                        <button onclick="removeFromCart(${item.cartId})" class="absolute top-3 right-3 sm:top-4 sm:right-4 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white dark:bg-gray-700 shadow-md flex items-center justify-center text-danger font-bold text-sm sm:text-base">&times;</button>
+                    </div>
+                `).join('');
+
+                const sum = cart.reduce((acc, item) => acc + item.price, 0);
+                total.innerText = `KES ${sum.toLocaleString()}`;
+            }
+        }
+
+        function sendWhatsAppOrder() {
+            if (cart.length === 0) return alert("Please select products first!");
+
+            let message = `*NEW ORDER - SCOPUS AGROSOLUTIONS*%0A%0A`;
+            let total = 0;
+
+            cart.forEach((item, index) => {
+                message += `${index + 1}. *${item.name}*%0A   Size: ${item.selectedSize}%0A   Price: KES ${item.price.toLocaleString()}%0A%0A`;
+                total += item.price;
+            });
+
+            message += `--------------------------------%0A*TOTAL: KES ${total.toLocaleString()}*%0A%0A_Please confirm order and provide payment details._`;
+            window.open(`https://wa.me/${ownerPhone}?text=${message}`, '_blank');
+        }
+
+        function sendContactWhatsApp(event) {
+            event.preventDefault();
+            const name = document.getElementById('contact-name').value;
+            const subject = document.getElementById('contact-subject').value;
+            const msg = document.getElementById('contact-message').value;
+
+            const text = `*SCOPUS AGRO INQUIRY*%0A%0A` +
+                `*From:* ${name}%0A` +
+                `*Subject:* ${subject}%0A` +
+                `*Message:* ${msg}`;
+
+            window.open(`https://wa.me/${ownerPhone}?text=${text}`, '_blank');
+        }
+
+        function setupTheme() {
+            const themeBtn = document.getElementById('theme-toggle');
+            if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            }
+            themeBtn.addEventListener('click', () => {
+                document.documentElement.classList.toggle('dark');
+                localStorage.theme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+            });
+        }
+
+        init();
+    </script>
+</body>
+</html>
