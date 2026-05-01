@@ -136,7 +136,6 @@
     <script>
         const ownerPhone = "254715081336";
         
-        // Product data with your specific pricing
         const products = [
             { 
                 id: 1, 
@@ -200,8 +199,8 @@
                 const sizes = Object.keys(p.prices);
                 return `
                 <div class="bg-white dark:bg-gray-800 rounded-3xl overflow-hidden shadow-sm border dark:border-gray-700 hover:shadow-xl transition group">
-                    <div class="h-48 overflow-hidden bg-gray-100 dark:bg-gray-900">
-                        <img src="${p.img}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                    <div class="h-48 md:h-56 overflow-hidden bg-gray-100 dark:bg-gray-900">
+                        <img src="${p.img}" class="w-full h-full object-cover object-top group-hover:scale-110 transition duration-500" alt="${p.name}">
                     </div>
                     <div class="p-6">
                         <span class="text-[9px] font-black text-gray-400 uppercase tracking-widest">${p.category}</span>
@@ -230,7 +229,7 @@
             updateCartUI();
             
             event.target.innerText = "Added ✓";
-            setTimeout(() => event.target.innerText = "Add to Order", 1000);
+            setTimeout(() => event.target.innerText = "Add to Cart", 1000);
         }
 
         function removeFromCart(cartId) {
@@ -248,7 +247,7 @@
             } else {
                 container.innerHTML = cart.map(item => `
                     <div class="flex gap-4 bg-gray-50 dark:bg-gray-800 p-4 rounded-2xl relative">
-                        <img src="${item.img}" class="w-16 h-16 object-cover rounded-lg">
+                        <img src="${item.img}" class="w-16 h-16 object-cover object-top rounded-lg" alt="${item.name}">
                         <div>
                             <p class="font-bold text-sm">${item.name}</p>
                             <p class="text-[10px] font-bold text-primary uppercase">${item.selectedSize}</p>
