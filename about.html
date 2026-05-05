@@ -117,21 +117,21 @@
             </div>
         </div>
 
-        <!-- Mobile Menu -->
-        <div id="mobile-menu" class="lg:hidden bg-white dark:bg-gray-800 border-t dark:border-gray-700">
-            <div class="px-4 py-4 flex flex-col gap-1">
-                <a href="index.html" onclick="closeMobileMenu()" class="px-4 py-3 rounded-xl font-bold uppercase tracking-wider text-sm hover:bg-primary/10 hover:text-primary transition">Home</a>
-                <a href="products.html" onclick="closeMobileMenu()" class="px-4 py-3 rounded-xl font-bold uppercase tracking-wider text-sm hover:bg-primary/10 hover:text-primary transition">Products</a>
-                <a href="about.html" onclick="closeMobileMenu()" class="px-4 py-3 rounded-xl font-bold uppercase tracking-wider text-sm hover:bg-primary/10 hover:text-primary transition">About</a>
-                <a href="contact.html" onclick="closeMobileMenu()" class="px-4 py-3 rounded-xl font-bold uppercase tracking-wider text-sm hover:bg-primary/10 hover:text-primary transition">Contact</a>
-                <div class="mt-3 pt-3 border-t dark:border-gray-700">
-                    <a href="tel:+254715081336" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-primary/10 text-primary font-bold text-sm">
-                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"></path></svg>
-                        +254715081336
-                    </a>
-                </div>
-            </div>
+       <!-- Mobile Menu -->
+<div id="mobile-menu" class="lg:hidden bg-white dark:bg-gray-800 border-t dark:border-gray-700">
+    <div class="px-4 py-4 flex flex-col gap-1">
+        <a href="index.html" onclick="closeMobileMenu()" class="nav-link px-4 py-3 rounded-xl font-bold uppercase tracking-wider text-sm hover:bg-primary/10 hover:text-primary transition">Home</a>
+        <a href="products.html" onclick="closeMobileMenu()" class="nav-link px-4 py-3 rounded-xl font-bold uppercase tracking-wider text-sm hover:bg-primary/10 hover:text-primary transition">Products</a>
+        <a href="about.html" onclick="closeMobileMenu()" class="nav-link px-4 py-3 rounded-xl font-bold uppercase tracking-wider text-sm hover:bg-primary/10 hover:text-primary transition">About</a>
+        <a href="contact.html" onclick="closeMobileMenu()" class="nav-link px-4 py-3 rounded-xl font-bold uppercase tracking-wider text-sm hover:bg-primary/10 hover:text-primary transition">Contact</a>
+        <div class="mt-3 pt-3 border-t dark:border-gray-700">
+            <a href="tel:+254715081336" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-primary/10 text-primary font-bold text-sm">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"></path></svg>
+                +254715081336
+            </a>
         </div>
+    </div>
+</div>
     </nav>
     </div>
 
@@ -247,6 +247,15 @@
         const hamburgerBtn = document.getElementById('hamburger-btn');
         const mobileMenu = document.getElementById('mobile-menu');
 
+        // Auto-highlight active nav link based on current page
+    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+    document.querySelectorAll('.nav-link').forEach(link => {
+        const linkPage = link.getAttribute('href');
+        if (linkPage === currentPage) {
+            link.classList.add('text-primary', 'bg-primary/10');
+        }
+    });
+
         hamburgerBtn.addEventListener('click', () => {
             const isOpen = mobileMenu.classList.toggle('menu-open');
             hamburgerBtn.classList.toggle('menu-open', isOpen);
@@ -266,7 +275,7 @@
 
         
         function init() {
-            renderProducts();
+          
             updateCartUI();
             setupTheme();
         }
@@ -316,6 +325,16 @@
             localStorage.setItem('scopus_cart_final', JSON.stringify(cart));
         }
 
+         function setupTheme() {
+            const themeBtn = document.getElementById('theme-toggle');
+            if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            }
+            themeBtn.addEventListener('click', () => {
+                document.documentElement.classList.toggle('dark');
+                localStorage.theme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+            });
+        }
         function updateCartUI() {
             const container = document.getElementById('cart-items');
             document.getElementById('cart-count').innerText = cart.length;
