@@ -6,25 +6,35 @@
     <title>About Us | Scopus Agrosolutions</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
+        // Apply theme BEFORE paint to avoid flash
+        (function() {
+            if (localStorage.theme === 'dark' ||
+                (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        })();
+
         tailwind.config = {
             darkMode: 'class',
             theme: {
                 extend: {
                     colors: {
-                        primary: '#16a34a',   // Green
-                        secondary: '#2563eb', // Blue
-                        accent: '#facc15',    // Yellow
+                        primary: '#16a34a',
+                        secondary: '#2563eb',
+                        accent: '#facc15',
+                        danger: '#ef4444',
                     }
                 }
             }
         }
-
-       
     </script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;900&display=swap');
         body { font-family: 'Poppins', sans-serif; }
-           /* Hamburger animation */
+
+        /* Hamburger animation */
         .hamburger-line {
             display: block;
             width: 24px;
@@ -54,8 +64,7 @@
             max-height: 400px;
         }
 
-
-         /* Cart sidebar overlay */
+        /* Cart sidebar overlay */
         #cart-overlay {
             display: none;
             position: fixed;
@@ -69,72 +78,75 @@
 </head>
 <body class="bg-slate-50 dark:bg-gray-900 text-slate-800 dark:text-gray-100 transition-colors duration-300">
 
+    <!-- Top Bar + Nav wrapper -->
     <div class="fixed top-0 left-0 right-0 z-[100]">
         <div class="bg-primary text-white text-[10px] sm:text-xs py-2 px-6 flex justify-between items-center font-semibold">
             <span>Delivering Countrywide</span>
             <span>Support: +254715081336</span>
         </div>
-           <!-- Navigation -->
-    <nav class="sticky top-0 z-50 bg-white/90 dark:bg-gray-800/90 backdrop-blur-md shadow-sm border-b dark:border-gray-700">
-        <div class="px-4 sm:px-6 py-3 sm:py-4 flex justify-between items-center">
-            <!-- Logo -->
-            <div class="flex items-center gap-2 sm:gap-3">
-                <div class="w-9 h-9 sm:w-12 sm:h-12 bg-primary rounded-xl flex items-center justify-center text-white font-black text-lg sm:text-2xl shadow-lg rotate-3 flex-shrink-0">SA</div>
-                <a href="index.html">
-                    <h1 class="text-base sm:text-xl font-bold leading-none text-primary uppercase tracking-tight">Scopus</h1>
-                    <span class="text-[8px] sm:text-[9px] font-bold text-secondary tracking-[0.2em] uppercase">Agrosolutions</span>
-                </a>
+
+        <!-- Navigation -->
+        <nav class="bg-white/90 dark:bg-gray-800/90 backdrop-blur-md shadow-sm border-b dark:border-gray-700">
+            <div class="px-4 sm:px-6 py-3 sm:py-4 flex justify-between items-center">
+                <!-- Logo -->
+                <div class="flex items-center gap-2 sm:gap-3">
+                    <div class="w-9 h-9 sm:w-12 sm:h-12 bg-primary rounded-xl flex items-center justify-center text-white font-black text-lg sm:text-2xl shadow-lg rotate-3 flex-shrink-0">SA</div>
+                    <a href="index.html">
+                        <h1 class="text-base sm:text-xl font-bold leading-none text-primary uppercase tracking-tight">Scopus</h1>
+                        <span class="text-[8px] sm:text-[9px] font-bold text-secondary tracking-[0.2em] uppercase">Agrosolutions</span>
+                    </a>
+                </div>
+
+                <!-- Desktop Nav Links -->
+                <div class="hidden lg:flex gap-8 text-sm font-bold uppercase tracking-wider">
+                    <a href="index.html" class="desktop-nav-link hover:text-primary transition">Home</a>
+                    <a href="products.html" class="desktop-nav-link hover:text-primary transition">Products</a>
+                    <a href="about.html" class="desktop-nav-link hover:text-primary transition">About</a>
+                    <a href="contact.html" class="desktop-nav-link hover:text-primary transition">Contact</a>
+                </div>
+
+                <!-- Right Controls -->
+                <div class="flex items-center gap-1 sm:gap-3">
+                    <!-- Theme Toggle -->
+                    <button id="theme-toggle" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+                        <svg class="w-5 h-5 dark:hidden" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+                        <svg class="w-5 h-5 hidden dark:block" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" clip-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"></path></svg>
+                    </button>
+
+                    <!-- Cart -->
+                    <button onclick="toggleCart()" class="relative p-2 text-gray-700 dark:text-gray-300 hover:text-primary transition">
+                        <svg class="w-6 h-6 sm:w-7 sm:h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+                        <span id="cart-count" class="absolute top-0 right-0 bg-danger text-white text-[10px] font-bold rounded-full h-4 w-4 flex items-center justify-center border-2 border-white dark:border-gray-800">0</span>
+                    </button>
+
+                    <!-- Hamburger (mobile only) -->
+                    <button id="hamburger-btn" class="lg:hidden p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition flex flex-col gap-1.5 items-center justify-center" aria-label="Toggle menu">
+                        <span class="hamburger-line"></span>
+                        <span class="hamburger-line"></span>
+                        <span class="hamburger-line"></span>
+                    </button>
+                </div>
             </div>
 
-            <!-- Desktop Nav Links -->
-            <div class="hidden lg:flex gap-8 text-sm font-bold uppercase tracking-wider">
-                <a href="index.html" class="hover:text-primary transition">Home</a>
-                <a href="products.html" class="hover:text-primary transition">Products</a>
-                <a href="about.html" class="hover:text-primary transition">About</a>
-                <a href="contact.html" class="hover:text-primary transition">Contact</a>
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="lg:hidden bg-white dark:bg-gray-800 border-t dark:border-gray-700">
+                <div class="px-4 py-4 flex flex-col gap-1">
+                    <a href="index.html" onclick="closeMobileMenu()" class="nav-link px-4 py-3 rounded-xl font-bold uppercase tracking-wider text-sm hover:bg-primary/10 hover:text-primary transition">Home</a>
+                    <a href="products.html" onclick="closeMobileMenu()" class="nav-link px-4 py-3 rounded-xl font-bold uppercase tracking-wider text-sm hover:bg-primary/10 hover:text-primary transition">Products</a>
+                    <a href="about.html" onclick="closeMobileMenu()" class="nav-link px-4 py-3 rounded-xl font-bold uppercase tracking-wider text-sm hover:bg-primary/10 hover:text-primary transition">About</a>
+                    <a href="contact.html" onclick="closeMobileMenu()" class="nav-link px-4 py-3 rounded-xl font-bold uppercase tracking-wider text-sm hover:bg-primary/10 hover:text-primary transition">Contact</a>
+                    <div class="mt-3 pt-3 border-t dark:border-gray-700">
+                        <a href="tel:+254715081336" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-primary/10 text-primary font-bold text-sm">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"></path></svg>
+                            +254715081336
+                        </a>
+                    </div>
+                </div>
             </div>
-
-            <!-- Right Controls -->
-            <div class="flex items-center gap-1 sm:gap-3">
-                <!-- Theme Toggle -->
-                <button id="theme-toggle" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition">
-                    <svg class="w-5 h-5 dark:hidden" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
-                    <svg class="w-5 h-5 hidden dark:block" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" clip-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"></path></svg>
-                </button>
-
-                <!-- Cart -->
-                <button onclick="toggleCart()" class="relative p-2 text-gray-700 dark:text-gray-300 hover:text-primary transition">
-                    <svg class="w-6 h-6 sm:w-7 sm:h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
-                    <span id="cart-count" class="absolute top-0 right-0 bg-danger text-white text-[10px] font-bold rounded-full h-4 w-4 flex items-center justify-center border-2 border-white dark:border-gray-800">0</span>
-                </button>
-
-                <!-- Hamburger (mobile only) -->
-                <button id="hamburger-btn" class="lg:hidden p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition flex flex-col gap-1.5 items-center justify-center" aria-label="Toggle menu">
-                    <span class="hamburger-line"></span>
-                    <span class="hamburger-line"></span>
-                    <span class="hamburger-line"></span>
-                </button>
-            </div>
-        </div>
-
-       <!-- Mobile Menu -->
-<div id="mobile-menu" class="lg:hidden bg-white dark:bg-gray-800 border-t dark:border-gray-700">
-    <div class="px-4 py-4 flex flex-col gap-1">
-        <a href="index.html" onclick="closeMobileMenu()" class="nav-link px-4 py-3 rounded-xl font-bold uppercase tracking-wider text-sm hover:bg-primary/10 hover:text-primary transition">Home</a>
-        <a href="products.html" onclick="closeMobileMenu()" class="nav-link px-4 py-3 rounded-xl font-bold uppercase tracking-wider text-sm hover:bg-primary/10 hover:text-primary transition">Products</a>
-        <a href="about.html" onclick="closeMobileMenu()" class="nav-link px-4 py-3 rounded-xl font-bold uppercase tracking-wider text-sm hover:bg-primary/10 hover:text-primary transition">About</a>
-        <a href="contact.html" onclick="closeMobileMenu()" class="nav-link px-4 py-3 rounded-xl font-bold uppercase tracking-wider text-sm hover:bg-primary/10 hover:text-primary transition">Contact</a>
-        <div class="mt-3 pt-3 border-t dark:border-gray-700">
-            <a href="tel:+254715081336" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-primary/10 text-primary font-bold text-sm">
-                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"></path></svg>
-                +254715081336
-            </a>
-        </div>
+        </nav>
     </div>
-</div>
-    </nav>
-    </div>
 
+    <!-- Hero / Our Story -->
     <section class="pt-[160px] pb-24 px-6 bg-white dark:bg-gray-800">
         <div class="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-16">
             <div class="flex-1">
@@ -163,6 +175,7 @@
         </div>
     </section>
 
+    <!-- The Scopus Standard -->
     <section class="py-24 bg-slate-100 dark:bg-gray-900 px-6">
         <div class="max-w-7xl mx-auto">
             <div class="text-center mb-16">
@@ -197,6 +210,7 @@
         </div>
     </section>
 
+    <!-- Mission Quote -->
     <section class="py-24 px-6 text-center bg-white dark:bg-gray-800">
         <div class="max-w-3xl mx-auto">
             <h3 class="text-4xl font-black mb-8 italic">"Our mission is to feed the future of Kenya by delivering high-performance agricultural solutions to every county."</h3>
@@ -210,6 +224,7 @@
         </div>
     </section>
 
+    <!-- Footer -->
     <footer class="bg-gray-900 text-white py-12 px-6 border-t border-white/5">
         <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
             <div class="flex items-center gap-3">
@@ -223,13 +238,17 @@
         </div>
     </footer>
 
-     <div id="cart-sidebar" class="fixed inset-y-0 right-0 w-full sm:w-[400px] bg-white dark:bg-gray-900 shadow-2xl z-[100] transform translate-x-full transition-transform duration-500 ease-in-out border-l dark:border-gray-700">
+    <!-- Cart Overlay -->
+    <div id="cart-overlay" onclick="toggleCart()"></div>
+
+    <!-- Cart Sidebar -->
+    <div id="cart-sidebar" class="fixed inset-y-0 right-0 w-full sm:w-[400px] bg-white dark:bg-gray-900 shadow-2xl z-[100] transform translate-x-full transition-transform duration-500 ease-in-out border-l dark:border-gray-700">
         <div class="p-8 h-full flex flex-col">
             <div class="flex justify-between items-center mb-10">
                 <h3 class="text-2xl font-black">My Order</h3>
                 <button onclick="toggleCart()" class="text-2xl hover:text-danger">&times;</button>
             </div>
-            <div id="cart-items" class="flex-grow overflow-y-auto space-y-4 custom-scrollbar"></div>
+            <div id="cart-items" class="flex-grow overflow-y-auto space-y-4"></div>
             <div class="mt-8 pt-8 border-t dark:border-gray-800">
                 <div class="flex justify-between text-2xl font-black mb-6">
                     <span>Total</span>
@@ -243,18 +262,32 @@
     </div>
 
     <script>
-          // Hamburger Menu
+        // ── Theme: apply before paint (IIFE in <head>) already handled, this just sets up the toggle ──
+        document.getElementById('theme-toggle').addEventListener('click', () => {
+            const isDark = document.documentElement.classList.toggle('dark');
+            localStorage.theme = isDark ? 'dark' : 'light';
+        });
+
+        // ── Active nav highlight (mobile + desktop) ──
+        const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+
+        // Mobile
+        document.querySelectorAll('.nav-link').forEach(link => {
+            if (link.getAttribute('href') === currentPage) {
+                link.classList.add('text-primary', 'bg-primary/10');
+            }
+        });
+
+        // Desktop
+        document.querySelectorAll('.desktop-nav-link').forEach(link => {
+            if (link.getAttribute('href') === currentPage) {
+                link.classList.add('text-primary');
+            }
+        });
+
+        // ── Hamburger ──
         const hamburgerBtn = document.getElementById('hamburger-btn');
         const mobileMenu = document.getElementById('mobile-menu');
-
-        // Auto-highlight active nav link based on current page
-    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
-    document.querySelectorAll('.nav-link').forEach(link => {
-        const linkPage = link.getAttribute('href');
-        if (linkPage === currentPage) {
-            link.classList.add('text-primary', 'bg-primary/10');
-        }
-    });
 
         hamburgerBtn.addEventListener('click', () => {
             const isOpen = mobileMenu.classList.toggle('menu-open');
@@ -266,80 +299,20 @@
             hamburgerBtn.classList.remove('menu-open');
         }
 
-        // Close mobile menu on outside click
         document.addEventListener('click', (e) => {
             if (!hamburgerBtn.contains(e.target) && !mobileMenu.contains(e.target)) {
                 closeMobileMenu();
             }
         });
 
-        
-        function init() {
-          
-            updateCartUI();
-            setupTheme();
-        }
+        // ── Cart ──
+        let cart = JSON.parse(localStorage.getItem('scopus_cart_final') || '[]');
 
-        function addToCart(productId, event) {
-            const product = products.find(p => p.id === productId);
-            const size = document.getElementById(`size-${productId}`).value;
-            cart.push({ ...product, selectedSize: size, cartId: Date.now() });
-            saveCart();
-            updateCartUI();
-
-            const btn = event.currentTarget;
-            const originalText = btn.innerText;
-            btn.innerText = "ADDED ✓";
-            btn.classList.add('bg-secondary');
-            setTimeout(() => {
-                btn.innerText = originalText;
-                btn.classList.remove('bg-secondary');
-            }, 1000);
-        }
-
-        function toggleCart() {
-            const sidebar = document.getElementById('cart-sidebar');
-            const overlay = document.getElementById('cart-overlay');
-            const isOpen = !sidebar.classList.contains('translate-x-full');
-
-            sidebar.classList.toggle('translate-x-full', isOpen);
-            overlay.classList.toggle('active', !isOpen);
-            document.body.style.overflow = isOpen ? '' : 'hidden';
-        }
-
-        function removeFromCart(cartId) {
-            cart = cart.filter(item => item.cartId !== cartId);
-            saveCart();
-            updateCartUI();
-        }
-
-        function clearCart() {
-            if (confirm("Empty your entire cart?")) {
-                cart = [];
-                saveCart();
-                updateCartUI();
-            }
-        }
-
-        function saveCart() {
-            localStorage.setItem('scopus_cart_final', JSON.stringify(cart));
-        }
-
-         function setupTheme() {
-            const themeBtn = document.getElementById('theme-toggle');
-            if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-                document.documentElement.classList.add('dark');
-            }
-            themeBtn.addEventListener('click', () => {
-                document.documentElement.classList.toggle('dark');
-                localStorage.theme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
-            });
-        }
         function updateCartUI() {
             const container = document.getElementById('cart-items');
             document.getElementById('cart-count').innerText = cart.length;
             if (cart.length === 0) {
-                container.innerHTML = `<p class="text-center py-10 opacity-30 text-xs font-bold uppercase">Empty</p>`;
+                container.innerHTML = `<p class="text-center py-10 opacity-30 text-xs font-bold uppercase">Your cart is empty</p>`;
                 document.getElementById('cart-total').innerText = "KES 0.00";
             } else {
                 container.innerHTML = cart.map(item => `
@@ -350,7 +323,7 @@
                             <p class="text-[10px] font-bold text-primary uppercase">${item.selectedSize}</p>
                             <p class="font-bold text-sm mt-1">KES ${item.price.toLocaleString()}</p>
                         </div>
-                        <button onclick="removeFromCart(${item.cartId})" class="absolute top-2 right-2 text-gray-300 hover:text-danger">&times;</button>
+                        <button onclick="removeFromCart(${item.cartId})" class="absolute top-2 right-2 text-gray-300 hover:text-red-500 text-lg leading-none">&times;</button>
                     </div>
                 `).join('');
                 const sum = cart.reduce((acc, item) => acc + item.price, 0);
@@ -358,25 +331,31 @@
             }
         }
 
-          function setupTheme() {
-            const themeBtn = document.getElementById('theme-toggle');
-            if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-                document.documentElement.classList.add('dark');
-            }
-            themeBtn.addEventListener('click', () => {
-                document.documentElement.classList.toggle('dark');
-                localStorage.theme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
-            });
+        function toggleCart() {
+            const sidebar = document.getElementById('cart-sidebar');
+            const overlay = document.getElementById('cart-overlay');
+            const isOpen = !sidebar.classList.contains('translate-x-full');
+            sidebar.classList.toggle('translate-x-full', isOpen);
+            overlay.classList.toggle('active', !isOpen);
+            document.body.style.overflow = isOpen ? '' : 'hidden';
         }
 
-        const themeToggle = document.getElementById('theme-toggle');
-themeToggle.addEventListener('click', () => {
-    document.documentElement.classList.toggle('dark');
-});
+        function removeFromCart(cartId) {
+            cart = cart.filter(item => item.cartId !== cartId);
+            localStorage.setItem('scopus_cart_final', JSON.stringify(cart));
+            updateCartUI();
+        }
 
-        init()
+        function sendWhatsAppOrder() {
+            if (cart.length === 0) return alert("Your cart is empty.");
+            const lines = cart.map(i => `• ${i.name} (${i.selectedSize}) — KES ${i.price.toLocaleString()}`).join('\n');
+            const total = cart.reduce((a, i) => a + i.price, 0);
+            const msg = encodeURIComponent(`Hello Scopus Agrosolutions, I'd like to order:\n\n${lines}\n\nTotal: KES ${total.toLocaleString()}`);
+            window.open(`https://wa.me/254715081336?text=${msg}`, '_blank');
+        }
 
+        // Init
+        updateCartUI();
     </script>
-
 </body>
 </html>
