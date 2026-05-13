@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Detail | Scopus Agrosolutions</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#16a34a',
+                        secondary: '#2563eb',
+                        accent: '#facc15',
+                        danger: '#dc2626',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;900&display=swap');
+        body { font-family: 'Poppins', sans-serif; }
+
+        .size-btn { transition: all 0.2s ease; }
+        .size-btn.active {
+            background: #16a34a;
+            color: white;
+            border-color: #16a34a;
+            transform: scale(1.05);
+        }
+
+        .hamburger-line {
+            display: block; width: 24px; height: 2px; background: currentColor;
+            transition: all 0.3s ease; transform-origin: center;
+        }
+        .menu-open .hamburger-line:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+        .menu-open .hamburger-line:nth-child(2) { opacity: 0; transform: scaleX(0); }
+        .menu-open .hamburger-line:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+        #mobile-menu { max-height: 0; overflow: hidden; transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        #mobile-menu.menu-open { max-height: 400px; }
+
+        #cart-overlay {
+            display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+            z-index: 99; backdrop-filter: blur(2px);
+        }
+        #cart-overlay.active { display: block; }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-up { animation: fadeUp 0.6s ease forwards; }
+        .fade-up-delay { animation: fadeUp 0.6s ease 0.15s forwards; opacity: 0; }
+        .fade-up-delay-2 { animation: fadeUp 0.6s ease 0.3s forwards; opacity: 0; }
+
+        .feature-chip {
+            display: inline-flex; align-items: center; gap: 6px;
+            background: #f0fdf4; border: 1px solid #bbf7d0;
+            color: #15803d; border-radius: 9999px;
+            padding: 6px 14px; font-size: 11px; font-weight: 700;
+        }
+        .dark .feature-chip {
+            background: #14532d33; border-color: #166534;
+            color: #4ade80;
+        }
+
+        .qty-btn { transition: background 0.15s; }
+        .qty-btn:hover { background: #16a34a; color: white; }
+
+        .tab-btn { transition: all 0.2s; border-bottom: 3px solid transparent; }
+        .tab-btn.active { color: #16a34a; border-bottom-color: #16a34a; }
+
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        .img-thumb { transition: all 0.2s; cursor: pointer; border: 2px solid transparent; }
+        .img-thumb.active { border-color: #16a34a; }
+        .img-thumb:hover { transform: scale(1.05); }
+    </style>
+</head>
+<body class="bg-slate-50 dark:bg-gray-900 text-slate-800 dark:text-gray-100 transition-colors duration-300">
+
+    <!-- Top bar -->
+    <div class="bg-primary text-white text-[10px] sm:text-xs py-2 px-4 sm:px-6 flex justify-between items-center font-semibold">
+        <div class="flex items-center gap-3 sm:gap-4">
+            <span class="hidden sm:inline">Delivering Countrywide</span>
+            <span>+254 107 007 922</span>
+        </div>
+        <div class="flex items-center gap-2">
+            <span class="bg-white/20 px-2 py-0.5 rounded">B2B Focused</span>
+        </div>
+    </div>
+
+    <!-- Nav -->
+    <nav class="sticky top-0 z-50 bg-white/90 dark:bg-gray-800/90 backdrop-blur-md shadow-sm border-b dark:border-gray-700">
+        <div class="px-4 sm:px-6 py-3 sm:py-4 flex justify-between items-center">
+            <div class="flex items-center gap-2 sm:gap-3">
+                <div class="w-9 h-9 sm:w-12 sm:h-12 bg-primary rounded-xl flex items-center justify-center text-white font-black text-lg sm:text-2xl shadow-lg rotate-3 flex-shrink-0">SA</div>
+                <a href="index.html">
+                    <h1 class="text-base sm:text-xl font-bold leading-none text-primary uppercase tracking-tight">Scopus</h1>
+                    <span class="text-[8px] sm:text-[9px] font-bold text-secondary tracking-[0.2em] uppercase">Agrosolutions</span>
+                </a>
+            </div>
+
+            <div class="hidden lg:flex gap-8 text-sm font-bold uppercase tracking-wider">
+                <a href="index.html" class="hover:text-primary transition">Home</a>
+                <a href="products.html" class="text-primary">Products</a>
+                <a href="about.html" class="hover:text-primary transition">About</a>
+                <a href="contact.html" class="hover:text-primary transition">Contact</a>
+            </div>
+
+            <div class="flex items-center gap-1 sm:gap-3">
+                <button id="theme-toggle" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+                    <svg class="w-5 h-5 dark:hidden" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+                    <svg class="w-5 h-5 hidden dark:block" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"></path></svg>
+                </button>
+
+                <button onclick="toggleCart()" class="relative p-2 text-gray-700 dark:text-gray-300 hover:text-primary transition">
+                    <svg class="w-6 h-6 sm:w-7 sm:h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+                    <span id="cart-count" class="absolute top-0 right-0 bg-danger text-white text-[10px] font-bold rounded-full h-4 w-4 flex items-center justify-center border-2 border-white dark:border-gray-800">0</span>
+                </button>
+
+                <button id="hamburger-btn" class="lg:hidden p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition flex flex-col gap-1.5 items-center justify-center">
+                    <span class="hamburger-line"></span><span class="hamburger-line"></span><span class="hamburger-line"></span>
+                </button>
+            </div>
+        </div>
+
+        <div id="mobile-menu" class="lg:hidden bg-white dark:bg-gray-800 border-t dark:border-gray-700">
+            <div class="px-4 py-4 flex flex-col gap-1">
+                <a href="index.html" class="px-4 py-3 rounded-xl font-bold uppercase text-sm hover:bg-primary/10">Home</a>
+                <a href="products.html" class="px-4 py-3 rounded-xl font-bold uppercase text-sm hover:bg-primary/10">Products</a>
+                <a href="about.html" class="px-4 py-3 rounded-xl font-bold uppercase text-sm hover:bg-primary/10">About</a>
+                <a href="contact.html" class="px-4 py-3 rounded-xl font-bold uppercase text-sm hover:bg-primary/10">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Breadcrumb -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 pt-8 pb-2">
+        <nav class="flex items-center gap-2 text-xs font-bold text-gray-400 uppercase tracking-wider">
+            <a href="index.html" class="hover:text-primary transition">Home</a>
+            <span>/</span>
+            <a href="index.html#products" class="hover:text-primary transition">Products</a>
+            <span>/</span>
+            <span id="breadcrumb-name" class="text-primary">Loading...</span>
+        </nav>
+    </div>
+
+    <!-- Product Detail -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 py-10">
+        <div id="not-found" class="hidden text-center py-32">
+            <p class="text-6xl mb-6">🌿</p>
+            <h2 class="text-3xl font-black mb-4">Product Not Found</h2>
+            <p class="text-gray-400 mb-10">We couldn't find that product in our catalog.</p>
+            <a href="index.html#products" class="bg-primary text-white px-8 py-4 rounded-2xl font-bold">Back to Catalog</a>
+        </div>
+
+        <div id="product-detail" class="hidden">
+            <!-- Top section -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 mb-20">
+
+                <!-- Image column -->
+                <div class="fade-up">
+                    <div id="main-image-wrap" class="relative rounded-[36px] overflow-hidden bg-white dark:bg-gray-800 shadow-2xl aspect-square mb-4 border dark:border-gray-700">
+                        <img id="main-image" src="" alt="" class="w-full h-full object-cover transition-all duration-500">
+                        <span class="absolute top-6 left-6 bg-secondary text-white text-[9px] font-black px-3 py-1.5 rounded-full tracking-widest">PREMIUM GRADE</span>
+                    </div>
+                    <div id="thumbnails" class="flex gap-3 mt-4"></div>
+                </div>
+
+                <!-- Info column -->
+                <div class="fade-up-delay flex flex-col justify-center">
+                    <span class="text-[10px] font-black text-secondary uppercase tracking-[0.25em] mb-3 block" id="product-category">—</span>
+                    <h1 id="product-name" class="text-4xl sm:text-5xl font-black leading-tight mb-3">—</h1>
+                    <p id="product-tagline" class="text-[11px] font-black text-gray-400 uppercase tracking-wider mb-5">—</p>
+
+                    <!-- Description -->
+                    <p id="product-description" class="text-gray-600 dark:text-gray-300 text-sm mb-6 leading-relaxed"></p>
+
+                    <!-- Key Benefits -->
+                    <div id="product-benefits-wrap" class="mb-6 hidden">
+                        <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3">Key Benefits</p>
+                        <ul id="product-benefits" class="space-y-1.5"></ul>
+                    </div>
+
+                    <!-- Suitable For -->
+                    <div id="product-suitable-wrap" class="mb-6 hidden">
+                        <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Suitable For</p>
+                        <p id="product-suitable" class="text-sm text-gray-600 dark:text-gray-300 font-semibold"></p>
+                    </div>
+
+                    <!-- Feature chips -->
+                    <div id="product-features" class="flex flex-wrap gap-2 mb-8"></div>
+
+                    <!-- Price -->
+                    <div class="mb-6">
+                        <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Price</p>
+                        <p id="price-display" class="text-4xl font-black text-primary">KES 0</p>
+                    </div>
+
+                    <!-- Size selector -->
+                    <div class="mb-8">
+                        <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3">Package Size</p>
+                        <div id="size-buttons" class="flex flex-wrap gap-3"></div>
+                    </div>
+
+                    <!-- Quantity -->
+                    <div class="mb-8">
+                        <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3">Quantity</p>
+                        <div class="flex items-center gap-0 w-fit border dark:border-gray-600 rounded-2xl overflow-hidden">
+                            <button onclick="changeQty(-1)" class="qty-btn w-12 h-12 font-black text-xl border-r dark:border-gray-600">−</button>
+                            <span id="qty-display" class="w-14 text-center font-black text-lg">1</span>
+                            <button onclick="changeQty(1)" class="qty-btn w-12 h-12 font-black text-xl border-l dark:border-gray-600">+</button>
+                        </div>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="flex flex-col sm:flex-row gap-4 mb-8">
+                        <button onclick="addToCartFromDetail()" class="flex-1 bg-primary text-white py-5 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-green-700 transition shadow-xl shadow-green-900/20">
+                            Add To Order
+                        </button>
+                        <button onclick="buyNow()" class="flex-1 bg-[#25D366] text-white py-5 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-[#128C7E] transition shadow-xl">
+                            Order via WhatsApp
+                        </button>
+                    </div>
+
+                    <!-- Trust badges -->
+                    <!-- <div class="grid grid-cols-3 gap-3 pt-6 border-t dark:border-gray-700">
+                        <div class="text-center">
+                            <div class="text-2xl mb-1">🚚</div>
+                            <p class="text-[9px] font-black uppercase tracking-wider text-gray-400">48hr Delivery</p>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-2xl mb-1">✅</div>
+                            <p class="text-[9px] font-black uppercase tracking-wider text-gray-400">Certified</p>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-2xl mb-1">📦</div>
+                            <p class="text-[9px] font-black uppercase tracking-wider text-gray-400">Bulk Rates</p>
+                        </div>
+                    </div> -->
+                </div>
+            </div>
+
+            <!-- Tabs section -->
+            <div class="fade-up-delay-2 bg-white dark:bg-gray-800 rounded-[36px] p-8 sm:p-12 shadow-sm border dark:border-gray-700 mb-20">
+                <div class="flex gap-8 border-b dark:border-gray-700 mb-8 overflow-x-auto">
+                    <button class="tab-btn active pb-4 text-sm font-black uppercase tracking-wider whitespace-nowrap" data-tab="overview">Overview</button>
+                    <!-- <button class="tab-btn pb-4 text-sm font-black uppercase tracking-wider whitespace-nowrap text-gray-400" data-tab="application">Application</button> -->
+                    <!-- <button class="tab-btn pb-4 text-sm font-black uppercase tracking-wider whitespace-nowrap text-gray-400" data-tab="specs">Specifications</button> -->
+                </div>
+
+                <div id="tab-overview" class="tab-content active space-y-4 text-gray-600 dark:text-gray-300 leading-relaxed">
+                    <p id="overview-text">Loading...</p>
+                </div>
+
+                <div id="tab-application" class="tab-content space-y-6">
+                    <div id="application-text" class="text-gray-600 dark:text-gray-300 leading-relaxed"></div>
+                </div>
+
+                <div id="tab-specs" class="tab-content">
+                    <div id="specs-table" class="space-y-0"></div>
+                </div>
+            </div>
+
+            <!-- Related products -->
+            <div>
+                <h3 class="text-2xl sm:text-3xl font-black mb-8">You Might Also <span class="text-primary">Like</span></h3>
+                <div id="related-products" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Cart overlay & sidebar -->
+    <div id="cart-overlay" onclick="toggleCart()"></div>
+    <div id="cart-sidebar" class="fixed inset-y-0 right-0 w-full sm:w-[420px] bg-white dark:bg-gray-900 shadow-2xl z-[100] transform translate-x-full transition-transform duration-500 border-l dark:border-gray-700">
+        <div class="p-10 h-full flex flex-col">
+            <div class="flex justify-between items-center mb-12">
+                <h3 class="text-3xl font-black">Your Order</h3>
+                <button onclick="toggleCart()" class="w-12 h-12 rounded-full border dark:border-gray-700 flex items-center justify-center hover:bg-danger hover:text-white transition text-2xl">&times;</button>
+            </div>
+            <div id="cart-items" class="flex-grow overflow-y-auto space-y-6"></div>
+            <div class="mt-10 pt-10 border-t dark:border-gray-800">
+                <div class="flex justify-between text-3xl font-black mb-8">
+                    <span>Total</span>
+                    <span id="cart-total" class="text-primary">KES 0</span>
+                </div>
+                <button onclick="sendWhatsAppOrder()" class="w-full bg-[#25D366] text-white py-5 rounded-2xl font-black uppercase tracking-widest hover:bg-[#128C7E] transition shadow-xl flex items-center justify-center gap-3 mb-6">
+                    Order via WhatsApp
+                </button>
+                <button onclick="clearCart()" class="w-full text-danger text-[10px] font-black uppercase tracking-widest opacity-60">Discard Order</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-10 px-6 border-t border-white/5 mt-20">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-10">
+            <div class="flex items-center gap-3">
+                <div class="w-12 h-12 bg-primary rounded-xl flex items-center justify-center font-black text-2xl">SA</div>
+                <p class="font-bold">Scopus Agrosolutions</p>
+            </div>
+            <div class="flex items-center gap-4">
+                <a href="https://x.com/Scopus_kenya" target="_blank" class="w-9 h-9 rounded-lg bg-white/5 hover:bg-white/10 flex items-center justify-center transition-colors duration-200">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" class="text-gray-400 hover:text-white transition-colors duration-200"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                </a>
+                <a href="https://www.tiktok.com/@scopus_agrosolutions?is_from_webapp=1&sender_device=pc" target="_blank" class="w-9 h-9 rounded-lg bg-white/5 hover:bg-white/10 flex items-center justify-center transition-colors duration-200">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" class="text-gray-400 hover:text-white transition-colors duration-200"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.32 6.32 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.74a4.85 4.85 0 0 1-1.01-.05z"/></svg>
+                </a>
+            </div>
+            <p class="text-xs text-gray-500 font-bold uppercase tracking-widest">© 2026 Scopus Agrosolutions.</p>
+        </div>
+    </footer>
+
+    <script>
+        const ownerPhone = "254107007922";
+
+        const products = [
+            {
+                id: 1,
+                name: "Omnigrow 25",
+                category: "Foliar Fertilizer",
+                tagline: "Balanced Foliar Fertilizer | NPK 25-25-25 + Microelements + Biostimulants",
+                description: "OmniGrow 25 is a premium balanced foliar fertilizer formulated to support vigorous crop growth throughout all growth stages. Enriched with essential microelements, amino acids, and biostimulants, it delivers rapid nutrient absorption for healthier plants, improved vigor, and higher yields. Designed for vegetables, fruits, cereals, pulses, ornamentals, and tree crops, OmniGrow 25 enhances vegetative growth, stimulates flowering and fruit development, strengthens natural plant immunity, and improves overall crop quality.",
+                benefits: [
+                    "Promotes rapid vegetative growth",
+                    "Enhances flowering and fruit set",
+                    "Improves nutrient uptake efficiency",
+                    "Boosts plant vigor and stress tolerance",
+                    "Increases crop yield and quality",
+                ],
+                suitableFor: "Vegetables, fruits, cereals, pulses, ornamentals, and tree crops.",
+                features: ["Boosts Leaf Area", "Fast Uptake", "N-P-K Balanced", "pH Stable"],
+                prices: { "250ml": 300, "500ml": 500, "1L": 850, "5L": 3500, "10L": 6800, "20L": 13000 },
+                img: "images/omnigrow.jpeg",
+                overview: "Omnigrow 25 is a comprehensive, multi-nutrient foliar fertilizer formulated for broad-spectrum crop nutrition. Its optimized NPK ratio ensures steady vegetative growth and robust canopy cover across all crop stages. Suitable for cereals, vegetables, horticultural crops, and legumes. Omnigrow 25 is manufactured under ISO-certified conditions and conforms to international agrochemical standards for residue safety.",
+                application: [
+                    { label: "Dilution Rate", value: "2–4ml per liter of water" },
+                    { label: "Timing", value: "Early morning or late evening application recommended" },
+                    { label: "Frequency", value: "Every 10–14 days during active growth" },
+                    { label: "Compatible With", value: "Most pesticides and micronutrient sprays; always jar-test first" },
+                ],
+                specs: [
+                    { label: "Formulation", value: "Soluble Liquid (SL)" },
+                    { label: "NPK Ratio", value: "25-25-25 + Microelements + Biostimulants" },
+                    { label: "pH Range", value: "5.5 – 7.0" },
+                    { label: "Shelf Life", value: "3 years (sealed)" },
+                    { label: "Pack Sizes", value: "250ml, 500ml, 1L, 5L, 10L, 20L" },
+                    { label: "Certification", value: "KEPHIS & PCPB Registered" },
+                ],
+            },
+            {
+                id: 2,
+                name: "Rootstart 52",
+                category: "Root Stimulant",
+                tagline: "Starter Fertilizer | NPK 10-52-10 + Microelements + Biostimulants",
+                description: "RootStart 52 is a high-phosphorus starter fertilizer specially developed to promote strong root development and successful crop establishment during early growth stages. Its fast-acting formulation supports transplant recovery, stimulates root expansion, and enhances nutrient absorption. Fortified with essential microelements and biostimulants, RootStart 52 ensures young plants develop a healthy foundation for vigorous growth and higher productivity.",
+                benefits: [
+                    "Stimulates rapid root development",
+                    "Enhances seedling vigor and establishment",
+                    "Improves nutrient uptake efficiency",
+                    "Supports transplant recovery",
+                    "Encourages strong early vegetative growth",
+                ],
+                suitableFor: "Seedlings, transplants, vegetables, cereals, fruits, ornamentals, and tree crops.",
+                features: ["Root Proliferation", "Transplant Recovery", "High Phosphorus", "Mycorrhizal Boost"],
+                prices: { "250ml": 300, "500ml": 500, "1L": 850, "5L": 3500, "10L": 6800, "20L": 13000 },
+                img: "images/rootstart.jpeg",
+                overview: "Rootstart 52 delivers a concentrated phosphorus and auxin-enriched formula directly to the root zone. It dramatically shortens the establishment phase for transplants, seed germination, and perennial crop recovery. Widely used in large-scale vegetable, fruit, and tea nursery production for its proven track record in achieving uniform stand establishment.",
+                application: [
+                    { label: "Drench Rate", value: "3–5ml per liter; apply at root zone" },
+                    { label: "Best Timing", value: "At transplanting or immediately post-germination" },
+                    { label: "Frequency", value: "Two applications, 7 days apart, at establishment" },
+                    { label: "Compatible With", value: "Bio-stimulants, humic acids, starter fertilizers" },
+                ],
+                specs: [
+                    { label: "Formulation", value: "Concentrated Liquid (CL)" },
+                    { label: "NPK Ratio", value: "10-52-10 + Microelements + Biostimulants" },
+                    { label: "Auxin Type", value: "IBA + NAA blend" },
+                    { label: "Shelf Life", value: "2 years (sealed)" },
+                    { label: "Pack Sizes", value: "250ml, 500ml, 1L, 5L, 10L, 20L" },
+                    { label: "Certification", value: "KEPHIS Registered" },
+                ],
+            },
+            {
+                id: 3,
+                name: "Fruitmax 46",
+                category: "Fruit Booster",
+                tagline: "High Potassium Fertilizer | NPK 10-10-46 + Microelements + Biostimulants",
+                description: "FruitMax 46 is a high-potassium foliar fertilizer designed to maximize flowering, fruit development, crop quality, and yield. The elevated potassium content improves fruit size, color, firmness, sugar accumulation, and shelf life while enhancing plant resilience during reproductive stages. Enhanced with microelements and biostimulants, FruitMax 46 supports consistent fruit setting and improved market quality across a wide range of crops.",
+                benefits: [
+                    "Promotes flowering and fruit set",
+                    "Enhances fruit size, color, and sweetness",
+                    "Improves crop quality and shelf life",
+                    "Increases yield potential",
+                    "Strengthens plant tolerance to stress",
+                ],
+                suitableFor: "Fruiting vegetables, fruits, cereals, pulses, ornamentals, and tree crops.",
+                features: ["Increases Brix", "Larger Fruit", "Better Color", "Extended Shelf Life"],
+                prices: { "250ml": 300, "500ml": 500, "1L": 850, "5L": 3500, "10L": 6800, "20L": 13000 },
+                img: "images/fruitmax42.jpeg",
+                overview: "Fruitmax 46 is engineered for the critical fruiting and ripening stages of crop production. Its high potassium and trace boron content drives photosynthate translocation to developing fruits, resulting in measurable improvements in fruit weight, uniformity, and post-harvest quality. Tested across mango, tomato, avocado, capsicum, and export horticulture crops.",
+                application: [
+                    { label: "Foliar Rate", value: "2–3ml per liter; spray to run-off" },
+                    { label: "Timing", value: "At fruit set and every 10 days until harvest" },
+                    { label: "Frequency", value: "3–5 applications per season" },
+                    { label: "Caution", value: "Avoid mixing with calcium-based products" },
+                ],
+                specs: [
+                    { label: "Formulation", value: "Soluble Liquid (SL)" },
+                    { label: "NPK Ratio", value: "10-10-46 + Microelements + Biostimulants" },
+                    { label: "Boron", value: "0.5%" },
+                    { label: "Shelf Life", value: "3 years (sealed)" },
+                    { label: "Pack Sizes", value: "250ml, 500ml, 1L, 5L, 10L, 20L" },
+                    { label: "Certification", value: "PCPB & KEPHIS Approved" },
+                ],
+            },
+            {
+                id: 4,
+                name: "CalMag Plus",
+                category: "Nutritional Supplement",
+                tagline: "Calcium, Magnesium & Boron Supplement + Microelements + Amino Acids",
+                description: "CalMag Plus is a specialized nutritional supplement formulated to correct and prevent calcium, magnesium, and boron deficiencies in crops. It strengthens plant cell walls, supports healthy flowering and fruit development, and improves overall crop quality and shelf life. Its advanced formulation enhances nutrient mobility and uptake while reducing physiological disorders associated with calcium and boron deficiencies.",
+                benefits: [
+                    "Strengthens plant structure and cell walls",
+                    "Improves flowering and fruit quality",
+                    "Prevents calcium and boron deficiencies",
+                    "Enhances shelf life and post-harvest quality",
+                    "Supports healthy plant growth and stress resistance",
+                ],
+                suitableFor: "Vegetables, fruits, ornamentals, cereals, and tree crops.",
+                features: ["Prevents BER", "Corrects Chlorosis", "Cell Wall Strength", "Magnesium Rich"],
+                prices: { "250ml": 300, "500ml": 500, "1L": 850, "5L": 3500, "10L": 6800, "20L": 13000 },
+                img: "images/calmag.jpeg",
+                overview: "CalMag Plus addresses the most common secondary nutrient deficiencies encountered in intensive farming systems. Its chelated calcium and magnesium formulation ensures rapid foliar absorption even under high humidity and acidic soil conditions. Essential for greenhouses, hydroponic systems, tomatoes, beans, and any calcium-sensitive crop under heavy production pressure.",
+                application: [
+                    { label: "Foliar Rate", value: "2–4ml per liter; thorough coverage" },
+                    { label: "Drench Option", value: "5ml per liter for soil drench" },
+                    { label: "Timing", value: "Preventive: from first fruit set; curative: on symptom appearance" },
+                    { label: "Compatible With", value: "NPK fertilizers, fungicides (except copper-based)" },
+                ],
+                specs: [
+                    { label: "Formulation", value: "Chelated Liquid" },
+                    { label: "Calcium (Ca)", value: "11% w/v" },
+                    { label: "Magnesium (Mg)", value: "5% w/v" },
+                    { label: "Shelf Life", value: "3 years (sealed)" },
+                    { label: "Pack Sizes", value: "250ml, 500ml, 1L, 5L, 10L, 20L" },
+                    { label: "Certification", value: "KEPHIS Registered" },
+                ],
+            },
+        ];
+
+        let cart = JSON.parse(localStorage.getItem('scopus_cart_final')) || [];
+        let selectedSize = '';
+        let qty = 1;
+        let currentProduct = null;
+
+        function getProductIdFromURL() {
+            const params = new URLSearchParams(window.location.search);
+            return parseInt(params.get('id'));
+        }
+
+        function init() {
+            setupTheme();
+            updateCartUI();
+
+            const id = getProductIdFromURL();
+            const product = products.find(p => p.id === id);
+
+            if (!product) {
+                document.getElementById('not-found').classList.remove('hidden');
+                return;
+            }
+
+            currentProduct = product;
+            document.title = `${product.name} | Scopus Agrosolutions`;
+            renderProductDetail(product);
+            renderRelated(product);
+            setupTabs();
+            document.getElementById('product-detail').classList.remove('hidden');
+        }
+
+        function renderProductDetail(p) {
+            document.getElementById('breadcrumb-name').textContent = p.name;
+            document.getElementById('product-category').textContent = p.category;
+            document.getElementById('product-name').textContent = p.name;
+            document.getElementById('product-tagline').textContent = p.tagline;
+            document.getElementById('main-image').src = p.img;
+            document.getElementById('main-image').alt = p.name;
+
+            // Description
+            if (p.description) {
+                document.getElementById('product-description').textContent = p.description;
+            }
+
+            // Key Benefits
+            if (p.benefits && p.benefits.length > 0) {
+                const benefitsWrap = document.getElementById('product-benefits-wrap');
+                const benefitsList = document.getElementById('product-benefits');
+                benefitsWrap.classList.remove('hidden');
+                benefitsList.innerHTML = p.benefits.map(b => `
+                    <li class="flex items-start gap-2 text-sm text-gray-600 dark:text-gray-300">
+                        <span class="text-primary font-black mt-0.5 shrink-0">✓</span>
+                        <span>${b}</span>
+                    </li>
+                `).join('');
+            }
+
+            // Suitable For
+            if (p.suitableFor) {
+                const suitableWrap = document.getElementById('product-suitable-wrap');
+                suitableWrap.classList.remove('hidden');
+                document.getElementById('product-suitable').textContent = p.suitableFor;
+            }
+
+            // Features chips
+            const featuresEl = document.getElementById('product-features');
+            featuresEl.innerHTML = p.features.map(f => `<span class="feature-chip"><span>✓</span>${f}</span>`).join('');
+
+            // Size buttons
+            const sizes = Object.keys(p.prices);
+            selectedSize = sizes[0];
+            const sizesEl = document.getElementById('size-buttons');
+            sizesEl.innerHTML = sizes.map((s, i) => `
+                <button class="size-btn px-5 py-2.5 rounded-xl border-2 dark:border-gray-600 font-black text-xs uppercase tracking-wider ${i === 0 ? 'active' : ''}"
+                    onclick="selectSize('${s}', this)">${s}</button>
+            `).join('');
+            updatePrice();
+
+            // Overview tab
+            document.getElementById('overview-text').textContent = p.overview;
+
+            // Application tab
+            const appEl = document.getElementById('application-text');
+            appEl.innerHTML = `<div class="space-y-0">${p.application.map(a => `
+                <div class="flex flex-col sm:flex-row sm:items-center py-4 border-b dark:border-gray-700 last:border-0">
+                    <span class="text-[10px] font-black uppercase tracking-widest text-gray-400 sm:w-40 shrink-0 mb-1 sm:mb-0">${a.label}</span>
+                    <span class="font-semibold">${a.value}</span>
+                </div>
+            `).join('')}</div>`;
+
+            // Specs tab
+            const specsEl = document.getElementById('specs-table');
+            specsEl.innerHTML = p.specs.map(s => `
+                <div class="flex flex-col sm:flex-row sm:items-center py-4 border-b dark:border-gray-700 last:border-0">
+                    <span class="text-[10px] font-black uppercase tracking-widest text-gray-400 sm:w-48 shrink-0 mb-1 sm:mb-0">${s.label}</span>
+                    <span class="font-bold">${s.value}</span>
+                </div>
+            `).join('');
+        }
+
+        function selectSize(size, btn) {
+            selectedSize = size;
+            document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            updatePrice();
+        }
+
+        function updatePrice() {
+            if (!currentProduct) return;
+            const price = currentProduct.prices[selectedSize] * qty;
+            document.getElementById('price-display').textContent = `KES ${price.toLocaleString()}`;
+        }
+
+        function changeQty(delta) {
+            qty = Math.max(1, qty + delta);
+            document.getElementById('qty-display').textContent = qty;
+            updatePrice();
+        }
+
+        function addToCartFromDetail() {
+            if (!currentProduct) return;
+            const price = currentProduct.prices[selectedSize];
+            for (let i = 0; i < qty; i++) {
+                cart.push({ ...currentProduct, selectedSize, currentPrice: price, cartId: Date.now() + i });
+            }
+            saveCart();
+            updateCartUI();
+            toggleCart();
+        }
+
+        function buyNow() {
+            if (!currentProduct) return;
+            const price = currentProduct.prices[selectedSize];
+            const total = price * qty;
+            const msg = `*NEW ORDER - SCOPUS AGROSOLUTIONS*%0A%0A1. *${currentProduct.name}* (${selectedSize}) x${qty} - KES ${total.toLocaleString()}%0A%0A*TOTAL: KES ${total.toLocaleString()}*`;
+            window.open(`https://wa.me/${ownerPhone}?text=${msg}`, '_blank');
+        }
+
+        function renderRelated(current) {
+            const related = products.filter(p => p.id !== current.id).slice(0, 3);
+            const el = document.getElementById('related-products');
+            el.innerHTML = related.map(p => {
+                const sizes = Object.keys(p.prices);
+                return `
+                <a href="product-detail.html?id=${p.id}" class="bg-white dark:bg-gray-800 rounded-[28px] overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border dark:border-gray-700 group block">
+                    <div class="h-52 overflow-hidden">
+                        <img src="${p.img}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" alt="${p.name}">
+                    </div>
+                    <div class="p-6">
+                        <p class="text-[9px] font-black text-secondary uppercase tracking-widest mb-1">${p.category}</p>
+                        <h4 class="font-bold text-lg mb-1">${p.name}</h4>
+                        <p class="text-primary font-black">From KES ${p.prices[sizes[0]].toLocaleString()}</p>
+                    </div>
+                </a>`;
+            }).join('');
+        }
+
+        function setupTabs() {
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.tab-btn').forEach(b => { b.classList.remove('active'); b.classList.add('text-gray-400'); });
+                    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                    btn.classList.add('active');
+                    btn.classList.remove('text-gray-400');
+                    document.getElementById(`tab-${btn.dataset.tab}`).classList.add('active');
+                });
+            });
+        }
+
+        function toggleCart() {
+            const sidebar = document.getElementById('cart-sidebar');
+            const overlay = document.getElementById('cart-overlay');
+            const isOpen = !sidebar.classList.contains('translate-x-full');
+            sidebar.classList.toggle('translate-x-full', isOpen);
+            overlay.classList.toggle('active', !isOpen);
+            document.body.style.overflow = isOpen ? '' : 'hidden';
+        }
+
+        function removeFromCart(cartId) {
+            cart = cart.filter(item => item.cartId !== cartId);
+            saveCart(); updateCartUI();
+        }
+
+        function clearCart() {
+            if (confirm("Empty your entire cart?")) { cart = []; saveCart(); updateCartUI(); }
+        }
+
+        function saveCart() { localStorage.setItem('scopus_cart_final', JSON.stringify(cart)); }
+
+        function updateCartUI() {
+            const container = document.getElementById('cart-items');
+            const count = document.getElementById('cart-count');
+            const total = document.getElementById('cart-total');
+            count.innerText = cart.length;
+            if (cart.length === 0) {
+                container.innerHTML = `<p class="text-center py-20 opacity-20 font-black uppercase tracking-widest text-sm">No Items Selected</p>`;
+                total.innerText = `KES 0`;
+            } else {
+                container.innerHTML = cart.map(item => `
+                    <div class="flex gap-6 bg-gray-50 dark:bg-gray-800/50 p-6 rounded-3xl relative border border-transparent hover:border-primary transition">
+                        <div class="flex-grow min-w-0">
+                            <p class="font-bold text-lg leading-tight mb-1 truncate">${item.name}</p>
+                            <p class="text-[10px] font-black text-primary uppercase tracking-widest mb-2">${item.selectedSize}</p>
+                            <p class="text-lg font-black">KES ${item.currentPrice.toLocaleString()}</p>
+                        </div>
+                        <button onclick="removeFromCart(${item.cartId})" class="w-8 h-8 rounded-full bg-white dark:bg-gray-700 shadow-md text-danger font-bold">&times;</button>
+                    </div>
+                `).join('');
+                const sum = cart.reduce((acc, item) => acc + item.currentPrice, 0);
+                total.innerText = `KES ${sum.toLocaleString()}`;
+            }
+        }
+
+        function sendWhatsAppOrder() {
+            if (cart.length === 0) return alert("Please select products first!");
+            let message = `*NEW ORDER - SCOPUS AGROSOLUTIONS*%0A%0A`;
+            cart.forEach((item, index) => {
+                message += `${index + 1}. *${item.name}* (${item.selectedSize}) - KES ${item.currentPrice.toLocaleString()}%0A`;
+            });
+            const sum = cart.reduce((acc, item) => acc + item.currentPrice, 0);
+            message += `%0A*TOTAL: KES ${sum.toLocaleString()}*`;
+            window.open(`https://wa.me/${ownerPhone}?text=${message}`, '_blank');
+        }
+
+        function setupTheme() {
+            if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            }
+            document.getElementById('theme-toggle').addEventListener('click', () => {
+                document.documentElement.classList.toggle('dark');
+                localStorage.theme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+            });
+        }
+
+        document.getElementById('hamburger-btn').addEventListener('click', () => {
+            document.getElementById('mobile-menu').classList.toggle('menu-open');
+            document.getElementById('hamburger-btn').classList.toggle('menu-open');
+        });
+
+        init();
+    </script>
+</body>
+</html>

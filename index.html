@@ -41,6 +41,30 @@
             z-index: 99; backdrop-filter: blur(2px);
         }
         #cart-overlay.active { display: block; }
+
+        /* Card hover lift */
+        .product-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .product-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 24px 48px rgba(0,0,0,0.12);
+        }
+        .product-card .card-img {
+            transition: transform 0.6s ease;
+        }
+        .product-card:hover .card-img {
+            transform: scale(1.06);
+        }
+
+        /* "View Details" overlay on image */
+        .product-card .view-overlay {
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .product-card:hover .view-overlay {
+            opacity: 1;
+        }
     </style>
 </head>
 <body class="bg-slate-50 dark:bg-gray-900 text-slate-800 dark:text-gray-100 transition-colors duration-300">
@@ -135,7 +159,7 @@
     <main id="products" class="max-w-7xl mx-auto px-4 sm:px-6 py-24">
         <div class="mb-16">
             <h3 class="text-3xl sm:text-4xl font-black mb-4">Chemical <span class="text-primary">Inventory</span></h3>
-            <p class="text-gray-500 max-w-md">Our high-performance range specifically selected for soil restoration and yield maximization.</p>
+            <p class="text-gray-500 max-w-md">Our high-performance range specifically selected for soil restoration and yield maximization. Click any product to see full details.</p>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8" id="product-list"></div>
@@ -203,23 +227,14 @@
             <div class="w-12 h-12 bg-primary rounded-xl flex items-center justify-center font-black text-2xl">SA</div>
             <p class="font-bold">Scopus Agrosolutions</p>
         </div>
-
-        <!-- Social Links -->
         <div class="flex items-center gap-4">
-            <!-- X (Twitter) -->
             <a href="https://x.com/Scopus_kenya" target="_blank" aria-label="Follow us on X" class="w-9 h-9 rounded-lg bg-white/5 hover:bg-white/10 flex items-center justify-center transition-colors duration-200">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" class="text-gray-400 hover:text-white transition-colors duration-200">
-                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-                </svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" class="text-gray-400 hover:text-white transition-colors duration-200"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
             </a>
-            <!-- TikTok -->
             <a href="https://www.tiktok.com/@scopus_agrosolutions?is_from_webapp=1&sender_device=pc" target="_blank" aria-label="Follow us on TikTok" class="w-9 h-9 rounded-lg bg-white/5 hover:bg-white/10 flex items-center justify-center transition-colors duration-200">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" class="text-gray-400 hover:text-white transition-colors duration-200">
-                    <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.32 6.32 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.74a4.85 4.85 0 0 1-1.01-.05z"/>
-                </svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" class="text-gray-400 hover:text-white transition-colors duration-200"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.32 6.32 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.74a4.85 4.85 0 0 1-1.01-.05z"/></svg>
             </a>
         </div>
-
         <p class="text-xs text-gray-500 font-bold uppercase tracking-widest">© 2026 Scopus Agrosolutions.</p>
     </div>
 </footer>
@@ -227,8 +242,7 @@
     <script>
         const ownerPhone = "254107007922";
 
-        // Updated Products with Size-Specific Pricing
-       const products = [
+        const products = [
             { 
                 id: 1, 
                 name: "Omnigrow 25", 
@@ -267,7 +281,6 @@
             setupTheme();
         }
 
-        // Updates the price label on the product card when size is changed
         function updateDisplayPrice(productId) {
             const product = products.find(p => p.id === productId);
             const size = document.getElementById(`size-${productId}`).value;
@@ -280,13 +293,22 @@
             list.innerHTML = products.map(p => {
                 const sizes = Object.keys(p.prices);
                 return `
-                <div class="bg-white dark:bg-gray-800 rounded-[32px] overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 border dark:border-gray-700">
-                    <div class="h-64 overflow-hidden relative">
-                        <img src="${p.img}" class="w-full h-full object-cover group-hover:scale-110 transition duration-700" alt="${p.name}">
+                <div class="product-card bg-white dark:bg-gray-800 rounded-[32px] overflow-hidden shadow-sm border dark:border-gray-700 cursor-pointer">
+                    <!-- Clickable image area → detail page -->
+                    <a href="product-detail.html?id=${p.id}" class="block h-64 overflow-hidden relative">
+                        <img src="${p.img}" class="card-img w-full h-full object-cover" alt="${p.name}">
                         <span class="absolute top-6 left-6 bg-secondary text-white text-[9px] font-black px-3 py-1.5 rounded-full tracking-widest">PREMIUM GRADE</span>
-                    </div>
+                        <!-- Hover overlay -->
+                        <div class="view-overlay absolute inset-0 bg-black/40 flex items-center justify-center">
+                            <span class="bg-white text-gray-900 font-black text-xs uppercase tracking-widest px-5 py-3 rounded-full">View Details →</span>
+                        </div>
+                    </a>
+
                     <div class="p-8">
-                        <h4 class="font-bold text-2xl mb-1">${p.name}</h4>
+                        <!-- Name is also a link -->
+                        <a href="product-detail.html?id=${p.id}" class="block hover:text-primary transition">
+                            <h4 class="font-bold text-2xl mb-1">${p.name}</h4>
+                        </a>
                         <p class="text-xs text-gray-400 font-bold mb-4">Chemical Agrosolution</p>
 
                         <div class="flex items-center mb-6">
@@ -303,6 +325,9 @@
                             <button onclick="addToCart(${p.id}, event)" class="w-full bg-primary text-white py-4 rounded-2xl hover:bg-green-700 transition font-black text-xs uppercase tracking-widest">
                                 Add To Order
                             </button>
+                            <a href="product-detail.html?id=${p.id}" class="block w-full text-center py-3 rounded-2xl border-2 border-gray-200 dark:border-gray-600 font-black text-xs uppercase tracking-widest hover:border-primary hover:text-primary transition">
+                                View Details
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -310,6 +335,8 @@
         }
 
         function addToCart(productId, event) {
+            // Stop the click from bubbling up to the card's anchor
+            event.stopPropagation();
             const product = products.find(p => p.id === productId);
             const size = document.getElementById(`size-${productId}`).value;
             const price = product.prices[size];
@@ -402,7 +429,6 @@
             });
         }
 
-        // Hamburger
         document.getElementById('hamburger-btn').addEventListener('click', () => {
             document.getElementById('mobile-menu').classList.toggle('menu-open');
             document.getElementById('hamburger-btn').classList.toggle('menu-open');
